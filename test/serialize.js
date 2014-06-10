@@ -74,6 +74,7 @@ module.exports = {
     },
     CompactNumber: function (test) {
         var s = SerializerBuilder.defaults.CompactNumber;
+
         test.equals(0, process(s, 0));
         test.equals(1, process(s, 1));
         test.equals(-1, process(s, -1));

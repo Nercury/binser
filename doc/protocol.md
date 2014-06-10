@@ -76,12 +76,12 @@ the sum of the sizes of all inner objects.
 
   First byte is interpreted thus:
 
-  > The lowest bit of byte: 0000000X
+  > The lowest bit of byte: ```0000000X```
 
-  1. If the lowest bit is 0, the remaining bits XXXXXXX0 contain
+  1. If the lowest bit is 0, the remaining bits ```XXXXXXX0``` contain
      an unsigned integer from 0 to 127. This is the final value.
      
-  2. Otherwise, the remaining bits XXXXXXX0 contain an unsigned
+  2. Otherwise, the remaining bits ```XXXXXXX0``` contain an unsigned
      integer that identifies the data-type of the actual number
      object in subsequent bytes:
      
@@ -93,6 +93,15 @@ the sum of the sizes of all inner objects.
      3         | UInt16
      4         | Int32
      5         | UInt32
+     
+  For example, a number 2 is ```10``` in binary. It fits between
+  0 to 127, so it can be encoded like this: ```00000100```. The lowest
+  bit is ```0```, because the number is embeded in the same byte.
+    
+  Another example, a number -400 as signed Int16 is
+  ```01110000 11111110``` in binary. The type value of Int16 is 2, 
+  which is ```10``` in binary, plus the lowest bit of ```1``` yields 
+  these final three bytes: ```00000101 01110000 11111110```.
      
   > You may notice that this stores some duplicated information, i.e.
     signed numbers can contain both positive and negative, and the 
