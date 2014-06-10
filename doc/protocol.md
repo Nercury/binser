@@ -71,3 +71,25 @@ the sum of the sizes of all inner objects.
 * ### UInt32
 
   32-bit unsigned Little-Endian integer.
+  
+* ### CompactNumber
+
+  First byte is interpreted thus:
+
+  > The lowest bit of byte: 0000000X
+
+  1. If the lowest bit is 0, the remaining bits XXXXXXX0 contain
+     an unsigned integer from 0 to 127. This is the final value.
+     
+  2. Otherwise, the remaining bits XXXXXXX0 contain an unsigned
+     integer that identifies the data-type of the actual number
+     object in subsequent bytes:
+     
+     Value     | Type
+     --------- | ---------
+     0         | Int8
+     1         | UInt8
+     2         | Int16
+     3         | UInt16
+     4         | Int32
+     5         | UInt32
