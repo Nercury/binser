@@ -93,3 +93,11 @@ the sum of the sizes of all inner objects.
      3         | UInt16
      4         | Int32
      5         | UInt32
+     
+  > You may notice that this stores some duplicated information, i.e.
+    signed numbers can contain both positive and negative, and the 
+    *lowest bit* (1) exception can contain a range of *Value 1* or
+    *Value 2* numbers. It was certainly possible to store negative 
+    numbers as unsigned (since we know sign anyways). But this already
+    was scary enough, so let's save these ideas for another, more 
+    horrific protocol.

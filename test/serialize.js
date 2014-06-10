@@ -72,16 +72,35 @@ module.exports = {
         test.throws(function () { process(s, 4294967296) });
         test.done();
     },
-    CompactInt: function (test) {
-        var s = SerializerBuilder.defaults.Int32;
-        test.equals(74, process(s, 74));
-        test.equals(300, process(s, 300));
-        test.equals(-74, process(s, -74));
-        test.equals(-300, process(s, -300));
-        test.equals(2147483647, process(s, 2147483647));
-        test.equals(-2147483648, process(s, -2147483648));
-        test.throws(function () { process(s, 2147483648) });
-        test.throws(function () { process(s, -2147483649) });
+    CompactNumber: function (test) {
+        var s = SerializerBuilder.defaults.CompactNumber;
+        test.equals(0, process(s, 0));
+//        test.equals(1, process(s, 1));
+//        test.equals(-1, process(s, -1));
+//        test.equals(126, process(s, 126));
+//        test.equals(127, process(s, 127));
+//        test.equals(128, process(s, 128));
+//        test.equals(-126, process(s, -126));
+//        test.equals(-127, process(s, -127));
+//        test.equals(-128, process(s, -128));
+//        test.equals(-129, process(s, -129));
+//        test.equals(254, process(s, 254));
+//        test.equals(255, process(s, 255));
+//        test.equals(256, process(s, 256));
+//        test.equals(257, process(s, 257));
+//        test.equals(358, process(s, 358));
+//        test.equals(-358, process(s, -358));
+//        test.equals(32767, process(s, 32767));
+//        test.equals(32768, process(s, 32768));
+//        test.equals(-32768, process(s, -32768));
+//        test.equals(-32769, process(s, -32769));
+//        test.equals(32769, process(s, 32769));
+//        test.equals(65535, process(s, 65535));
+//        test.equals(2147483647, process(s, 2147483647));
+//        test.equals(-2147483648, process(s, -2147483648));
+//        test.equals(4294967295, process(s, 4294967295));
+//        test.throws(function () { process(s, 4294967296) });
+//        test.throws(function () { process(s, -2147483649) });
         test.done();
     }
 };

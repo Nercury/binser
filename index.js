@@ -121,20 +121,96 @@ var defaults = {
             return b.readUInt32LE(0);
         }
     },
-    CompactInt: { // ToDo:
+    CompactNumber: {
         /**
          * @returns {Buffer}
          */
         serialize: function(v) {
-            var b = new Buffer(4);
-            b.writeUInt32LE(v, 0);
+            if (v >= 0 && v < 128) { // Exception.
+                return defaults.UInt8.serialize(v << 1);
+            }
+
+            var
+                type,
+                b
+            ;
+
+            if (v >= 0) {
+                if (v < 256) {
+                    type = 1;
+                    b = new Buffer(2);
+                    b.writeUInt8(type);
+                    b.writeUInt8(v);
+                } else if (v < 65536) {
+                    type = 3;
+                    b = new Buffer(3);
+                    b.writeUInt8(type);
+                    b.writeUInt16LE(v);
+                } else if (v < 4294967296) {
+                    type = 4;
+                    b = new Buffer(5);
+                    b.writeUInt8(type);
+                    b.writeUInt32LE(v);
+                } else {
+                    throw new TypeError('value is out of bounds');
+                }
+            } else {
+                if (v >= -128) {
+                    type = 0;
+                    b = new Buffer(2);
+                    b.writeUInt8(type);
+                    b.writeInt8(v);
+                } else if (v >= -32768) {
+                    type = 2;
+                    b = new Buffer(3);
+                    b.writeUInt8(type);
+                    b.writeInt16LE(v);
+                } else if (v >= -2147483648) {
+                    type = 4;
+                    b = new Buffer(5);
+                    b.writeUInt8(type);
+                    b.writeInt32LE(v);
+                } else {
+                    throw new TypeError('value is out of bounds');
+                }
+            }
+
             return b;
         },
         /**
          * @param {Buffer} b
          */
         deserialize : function (b) {
-            return b.readUInt32LE(0);
+            var
+                exception,
+                firstByte,
+                type
+            ;
+
+            firstByte = b.readUInt8(0);
+            exception = firstByte & 1 == 0;
+
+            if (exception) {
+                return firstByte >>> 1;
+            }
+
+            type = firstByte >>> 1;
+
+            if (type === 0) {
+                return b.readInt8(1);
+            } else if (type === 1) {
+                return b.readUInt8(1);
+            } else if (type === 2) {
+                return b.readInt16LE(1);
+            } else if (type === 3) {
+                return b.readUInt16LE(1);
+            } else if (type === 4) {
+                return b.readInt32LE(1);
+            } else if (type === 5) {
+                return b.readUInt32LE(1);
+            }
+
+            throw new RangeError('Unknown value type');
         }
     }
 //    String: {
