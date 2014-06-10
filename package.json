@@ -1,0 +1,29 @@
+{
+    "name": "binser",
+    "version": "0.9.0",
+    "description": "A scary binary serializer and deserializer of binser protocol",
+    "main": "index.js",
+    "scripts": {
+        "test": "node test.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/Nercury/binser.git"
+    },
+    "keywords": [
+        "binary",
+        "serializer",
+        "deserializer",
+        "bits",
+        "scary"
+    ],
+    "devDependencies": {
+        "nodeunit": "^0.9.0"
+    },
+    "author": "Nerijus Arlauskas <nercury@gmail.com>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/Nercury/binser/issues"
+    },
+    "homepage": "https://github.com/Nercury/binser"
+}
