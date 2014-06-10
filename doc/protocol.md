@@ -48,3 +48,32 @@ the sum of the sizes of all inner objects.
 > section at the end to learn how to prepare your objects for
 > *identification* or *versioning*.
 
+Int8
+----
+
+8-bit integer, or signed byte.
+
+UInt8
+-----
+
+8-bit unsigned integer, or char.
+
+Int16
+-----
+
+16-bit signed Little-Endian integer.
+
+UInt16
+------
+
+16-bit unsigned Little-Endian integer.
+
+Int32
+-----
+
+32-bit signed Little-Endian integer.
+
+UInt32
+------
+
+32-bit unsigned Little-Endian integer.
