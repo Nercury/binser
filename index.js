@@ -139,18 +139,18 @@ var defaults = {
                 if (v < 256) {
                     type = 1;
                     b = new Buffer(2);
-                    b.writeUInt8(type);
-                    b.writeUInt8(v);
+                    b.writeUInt8((type << 1) + 1, 0);
+                    b.writeUInt8(v, 1);
                 } else if (v < 65536) {
                     type = 3;
                     b = new Buffer(3);
-                    b.writeUInt8(type);
-                    b.writeUInt16LE(v);
+                    b.writeUInt8((type << 1) + 1, 0);
+                    b.writeUInt16LE(v, 1);
                 } else if (v < 4294967296) {
-                    type = 4;
+                    type = 5;
                     b = new Buffer(5);
-                    b.writeUInt8(type);
-                    b.writeUInt32LE(v);
+                    b.writeUInt8((type << 1) + 1, 0);
+                    b.writeUInt32LE(v, 1);
                 } else {
                     throw new TypeError('value is out of bounds');
                 }
@@ -158,18 +158,18 @@ var defaults = {
                 if (v >= -128) {
                     type = 0;
                     b = new Buffer(2);
-                    b.writeUInt8(type);
-                    b.writeInt8(v);
+                    b.writeUInt8((type << 1) + 1, 0);
+                    b.writeInt8(v, 1);
                 } else if (v >= -32768) {
                     type = 2;
                     b = new Buffer(3);
-                    b.writeUInt8(type);
-                    b.writeInt16LE(v);
+                    b.writeUInt8((type << 1) + 1, 0);
+                    b.writeInt16LE(v, 1);
                 } else if (v >= -2147483648) {
                     type = 4;
                     b = new Buffer(5);
-                    b.writeUInt8(type);
-                    b.writeInt32LE(v);
+                    b.writeUInt8((type << 1) + 1, 0);
+                    b.writeInt32LE(v, 1);
                 } else {
                     throw new TypeError('value is out of bounds');
                 }
@@ -188,7 +188,7 @@ var defaults = {
             ;
 
             firstByte = b.readUInt8(0);
-            exception = firstByte & 1 == 0;
+            exception = firstByte & 1 ? false : true;
 
             if (exception) {
                 return firstByte >>> 1;
