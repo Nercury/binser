@@ -110,3 +110,8 @@ the sum of the sizes of all inner objects.
     numbers as unsigned (since we know sign anyways). But this already
     was scary enough, so let's save these ideas for another, more 
     horrific protocol.
+    
+* ### String
+
+  CompactNumber that contains positive integer for length, followed by the contents
+  of that length. Length is measured in bytes. String itself should always be UTF8.

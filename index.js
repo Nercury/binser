@@ -39,6 +39,20 @@ var defaults = {
          */
         deserialize : function (b) {
             return b.readInt8(0);
+        },
+        /**
+         * Check if buffer has enough data to deserialize this item.
+         * If it does not, return minimum required length for the next
+         * check. If it does, return true.
+         *
+         * @param {Buffer} b Buffer.
+         * @returns {{canRead: boolean, requiresLength: int}}
+         */
+        hasEnoughLength : function(b) {
+            return {
+                canRead : b.length >= 1,
+                requiresLength : 1
+            };
         }
     },
     UInt8: {
@@ -55,6 +69,20 @@ var defaults = {
          */
         deserialize : function (b) {
             return b.readUInt8(0);
+        },
+        /**
+         * Check if buffer has enough data to deserialize this item.
+         * If it does not, return minimum required length for the next
+         * check. If it does, return true.
+         *
+         * @param {Buffer} b Buffer.
+         * @returns {{canRead: boolean, requiresLength: int}}
+         */
+        hasEnoughLength : function(b) {
+            return {
+                canRead : b.length >= 1,
+                requiresLength : 1
+            };
         }
     },
     Int16: {
@@ -71,6 +99,20 @@ var defaults = {
          */
         deserialize : function (b) {
             return b.readInt16LE(0);
+        },
+        /**
+         * Check if buffer has enough data to deserialize this item.
+         * If it does not, return minimum required length for the next
+         * check. If it does, return true.
+         *
+         * @param {Buffer} b Buffer.
+         * @returns {{canRead: boolean, requiresLength: int}}
+         */
+        hasEnoughLength : function(b) {
+            return {
+                canRead : b.length >= 2,
+                requiresLength : 2
+            };
         }
     },
     UInt16: {
@@ -87,6 +129,20 @@ var defaults = {
          */
         deserialize : function (b) {
             return b.readUInt16LE(0);
+        },
+        /**
+         * Check if buffer has enough data to deserialize this item.
+         * If it does not, return minimum required length for the next
+         * check. If it does, return true.
+         *
+         * @param {Buffer} b Buffer.
+         * @returns {{canRead: boolean, requiresLength: int}}
+         */
+        hasEnoughLength : function(b) {
+            return {
+                canRead : b.length >= 2,
+                requiresLength : 2
+            };
         }
     },
     Int32: {
@@ -103,6 +159,20 @@ var defaults = {
          */
         deserialize : function (b) {
             return b.readInt32LE(0);
+        },
+        /**
+         * Check if buffer has enough data to deserialize this item.
+         * If it does not, return minimum required length for the next
+         * check. If it does, return true.
+         *
+         * @param {Buffer} b Buffer.
+         * @returns {{canRead: boolean, requiresLength: int}}
+         */
+        hasEnoughLength : function(b) {
+            return {
+                canRead : b.length >= 4,
+                requiresLength : 4
+            };
         }
     },
     UInt32: {
@@ -119,6 +189,20 @@ var defaults = {
          */
         deserialize : function (b) {
             return b.readUInt32LE(0);
+        },
+        /**
+         * Check if buffer has enough data to deserialize this item.
+         * If it does not, return minimum required length for the next
+         * check. If it does, return true.
+         *
+         * @param {Buffer} b Buffer.
+         * @returns {{canRead: boolean, requiresLength: int}}
+         */
+        hasEnoughLength : function(b) {
+            return {
+                canRead : b.length >= 4,
+                requiresLength : 4
+            };
         }
     },
     CompactNumber: {
@@ -211,23 +295,103 @@ var defaults = {
             }
 
             throw new RangeError('Unknown value type');
+        },
+        /**
+         * Check if buffer has enough data to deserialize this item.
+         * If it does not, return minimum required length for the next
+         * check. If it does, return true.
+         *
+         * @param {Buffer} b Buffer.
+         * @returns {{canRead: boolean, requiresLength: int}}
+         */
+        hasEnoughLength : function(b) {
+            if (b.length < 1) {
+                return { canRead: false, requiresLength: 1 }; // We need at least 1 byte to do something.
+            }
+
+            var
+                exception,
+                firstByte,
+                type
+            ;
+
+            firstByte = b.readUInt8(0);
+            exception = firstByte & 1 ? false : true;
+
+            if (exception) {
+                return { canRead: true, requiresLength: 1 };
+            }
+
+            type = firstByte >>> 1;
+
+            if (type === 0 || type === 1) {
+                return {
+                    canRead : b.length >= 2,
+                    requiresLength : 2
+                };
+            } else if (type === 2 || type === 3) {
+                return {
+                    canRead : b.length >= 3,
+                    requiresLength : 3
+                };
+            } else if (type === 4 || type === 5) {
+                return {
+                    canRead : b.length >= 5,
+                    requiresLength : 5
+                };
+            }
+
+            throw new RangeError('Unknown value type');
+        }
+    },
+    String: {
+        /**
+         * @returns {Buffer}
+         */
+        serialize: function(v) {
+            var sl = defaults.CompactNumber.serialize(v.length),
+                sb = new Buffer(v);
+            return Buffer.concat([ sl, sb ], sl.length + sb.length);
+        },
+        /**
+         * @param {Buffer} b
+         */
+        deserialize : function (b) {
+            var compactNumberCheck = defaults.CompactNumber.hasEnoughLength(b);
+            if (!compactNumberCheck.canRead) {
+                throw new RangeError('Can not read string, buffer too short');
+            }
+            var stringLength = defaults.CompactNumber.deserialize(b);
+            var stringBuffer = b.slice(compactNumberCheck.requiresLength);
+            if (stringBuffer.length < stringLength) {
+                throw new RangeError('Can not read string, buffer too short');
+            }
+            return stringBuffer.toString();
+        },
+        /**
+         * Check if buffer has enough data to deserialize this item.
+         * If it does not, return minimum required length for the next
+         * check. If it does, return true.
+         *
+         * @param {Buffer} b Buffer.
+         * @returns {{canRead: boolean, requiresLength: int}}
+         */
+        hasEnoughLength : function(b) {
+            var compactNumberCheck = defaults.CompactNumber.hasEnoughLength(b);
+
+            if (false === compactNumberCheck.canRead) {
+                return compactNumberCheck;
+            }
+
+            var stringLength = defaults.CompactNumber.deserialize(b);
+            var fullLength = stringLength + compactNumberCheck.requiresLength;
+
+            return {
+                canRead: b.length >= fullLength,
+                requiresLength: fullLength
+            };
         }
     }
-//    String: {
-//        /**
-//         * @returns {Buffer}
-//         */
-//        serialize: function(v) {
-//            var sl =
-//            var sb = new Buffer(v);
-//        },
-//        /**
-//         * @param {Buffer} b
-//         */
-//        deserialize : function (b) {
-//            return b.toString();
-//        }
-//    }
 };
 
 /**

@@ -74,7 +74,6 @@ module.exports = {
     },
     CompactNumber: function (test) {
         var s = SerializerBuilder.defaults.CompactNumber;
-
         test.equals(0, process(s, 0));
         test.equals(1, process(s, 1));
         test.equals(-1, process(s, -1));
@@ -102,6 +101,14 @@ module.exports = {
         test.equals(4294967295, process(s, 4294967295));
         test.throws(function () { process(s, 4294967296) });
         test.throws(function () { process(s, -2147483649) });
+        test.done();
+    },
+    String: function (test) {
+        var s = SerializerBuilder.defaults.String;
+        test.equals("", process(s, ""));
+        test.equals("a", process(s, "a"));
+        test.equals("<html></html>", process(s, "<html></html>"));
+        test.equals("Hello\nworld", process(s, "Hello\nworld"));
         test.done();
     }
 };
