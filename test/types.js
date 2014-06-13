@@ -2,7 +2,7 @@
  * Created by brolis on 2014-06-08.
  */
 
-var SerializerBuilder = require('../index.js');
+var types = require('../lib/types.js');
 
 var process = function(s, stuff) {
     return s.deserialize(s.serialize(stuff));
@@ -10,7 +10,7 @@ var process = function(s, stuff) {
 
 module.exports = {
     Int8: function (test) {
-        var s = SerializerBuilder.types.Int8;
+        var s = types.Int8;
         test.equals(74, process(s, 74));
         test.equals(0, process(s, 0));
         test.equals(-1, process(s, -1));
@@ -20,8 +20,8 @@ module.exports = {
         test.throws(function () { process(s, -129) });
         test.done();
     },
-    eUInt8: function (test) {
-        var s = SerializerBuilder.types.UInt8;
+    UInt8: function (test) {
+        var s = types.UInt8;
         test.equals(74, process(s, 74));
         test.equals(0, process(s, 0));
         test.equals(255, process(s, 255));
@@ -30,7 +30,7 @@ module.exports = {
         test.done();
     },
     Int16: function (test) {
-        var s = SerializerBuilder.types.Int16;
+        var s = types.Int16;
         test.equals(74, process(s, 74));
         test.equals(300, process(s, 300));
         test.equals(-74, process(s, -74));
@@ -40,7 +40,7 @@ module.exports = {
         test.done();
     },
     UInt16: function (test) {
-        var s = SerializerBuilder.types.UInt16;
+        var s = types.UInt16;
         test.equals(74, process(s, 74));
         test.equals(300, process(s, 300));
         test.equals(32768, process(s, 32768));
@@ -50,7 +50,7 @@ module.exports = {
         test.done();
     },
     Int32: function (test) {
-        var s = SerializerBuilder.types.Int32;
+        var s = types.Int32;
         test.equals(74, process(s, 74));
         test.equals(300, process(s, 300));
         test.equals(-74, process(s, -74));
@@ -62,7 +62,7 @@ module.exports = {
         test.done();
     },
     UInt32: function (test) {
-        var s = SerializerBuilder.types.UInt32;
+        var s = types.UInt32;
         test.equals(74, process(s, 74));
         test.equals(300, process(s, 300));
         test.equals(32768, process(s, 32768));
@@ -73,7 +73,7 @@ module.exports = {
         test.done();
     },
     CompactNumber: function (test) {
-        var s = SerializerBuilder.types.CompactNumber;
+        var s = types.CompactNumber;
         test.equals(0, process(s, 0));
         test.equals(1, process(s, 1));
         test.equals(-1, process(s, -1));
@@ -104,7 +104,7 @@ module.exports = {
         test.done();
     },
     String: function (test) {
-        var s = SerializerBuilder.types.String;
+        var s = types.String;
         test.equals("", process(s, ""));
         test.equals("a", process(s, "a"));
         test.equals("<html></html>", process(s, "<html></html>"));
