@@ -24,11 +24,7 @@
  * Created by Nercury on 2014-06-10.
  */
 
-/**
- * @param {{}} items
- * @class SerializerBuilder
- */
-module.exports = function(items) {
+/*module.exports = function(items) {
 
     var items = items | [];
 
@@ -43,20 +39,10 @@ module.exports = function(items) {
             );
         },
 
-        /**
-         * @class Serializer
-         * @param items
-         */
         getSerializer: function(items) {
 
             return {
-                /**
-                 * Serialize an object to buffer.
-                 *
-                 * @param {{}} obj
-                 *
-                 * @return {Buffer}
-                 */
+
                 serialize: function(obj) {
                     var buffers = [];
                     var i;
@@ -72,19 +58,22 @@ module.exports = function(items) {
                     return Buffer.concat(buffers, totalLength);
                 },
 
-                /**
-                 * Deserialize an object from buffer.
-                 *
-                 * @param {Buffer} buf
-                 *
-                 * @return {{}}
-                 */
                 deserialize: function(buf) {
 
                 }
             };
         }
     };
-};
+};*/
 
+/**
+ * Default serializer types.
+ * @type {types}
+ */
 module.exports.types = require('./lib/types.js');
+
+/**
+ * Manual buffer reader.
+ * @type {Reader}
+ */
+module.exports.Reader = require('./lib/reader.js');
