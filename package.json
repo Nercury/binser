@@ -1,6 +1,6 @@
 {
     "name": "binser",
-    "version": "0.9.0",
+    "version": "0.9.1",
     "description": "A binary serializer and deserializer with tools to read and write objects to buffers.",
     "main": "index.js",
     "scripts": {
