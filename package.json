@@ -1,7 +1,7 @@
 {
     "name": "binser",
     "version": "0.9.0",
-    "description": "A scary binary serializer and deserializer of binser protocol",
+    "description": "A binary serializer and deserializer with tools to read and write objects to buffers.",
     "main": "index.js",
     "scripts": {
         "test": "node test.js"
@@ -17,6 +17,7 @@
         "bits",
         "scary"
     ],
+    "engines" : { "node" : ">=0.10.0" },
     "devDependencies": {
         "nodeunit": "^0.9.0"
     },
