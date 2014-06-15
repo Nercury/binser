@@ -24,48 +24,6 @@
  * Created by Nercury on 2014-06-10.
  */
 
-/*module.exports = function(items) {
-
-    var items = items | [];
-
-    return {
-
-        int8: function(name) {
-            items.push(
-                {
-                    name: name,
-                    serializer: defaults.Int8
-                }
-            );
-        },
-
-        getSerializer: function(items) {
-
-            return {
-
-                serialize: function(obj) {
-                    var buffers = [];
-                    var i;
-                    var val;
-                    var lastBuf;
-                    var totalLength = 0;
-                    for (i = 0; i < items.length; i++) {
-                        val = obj[items[i].name];
-                        lastBuf = items[i].serializer.serialize(val);
-                        buffers.push(lastBuf);
-                        totalLength += lastBuf.length;
-                    }
-                    return Buffer.concat(buffers, totalLength);
-                },
-
-                deserialize: function(buf) {
-
-                }
-            };
-        }
-    };
-};*/
-
 /**
  * Default serializer types.
  * @type {types}
@@ -82,4 +40,4 @@ module.exports.Reader = require('./lib/Reader.js');
  * Custom serialization type.
  * @type {ObjectType}
  */
-module.exports.Reader = require('./lib/ObjectType.js');
+module.exports.ObjectType = require('./lib/ObjectType.js');
