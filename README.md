@@ -56,3 +56,33 @@ reader.onRead = function(str) { // Set callback.
 // On your "data" event, feed the buffer bytes into your reader:
 reader.feed(buffer);
 ```
+
+## Simple object serialization and deserialization
+
+ObjectType uses types in clearly defined sequence to serialize a hash.
+If this sequence does not change, the object can be restored to the exact same
+hash on deserialization.
+
+```javascript
+// Require "types" object that contains built-in object serializers.
+var types = require('binser').types;
+// Require "ObjectType" that can be used to make a template for your object.
+var ObjectType = require('binser').ObjectType;
+
+// Create your type that is composed from other types.
+var MyType = new ObjectType(
+    {
+        name: types.String,
+        age: types.UInt8
+    }
+);
+
+// Serialize your hash to buffer using your type.
+var buffer = MyType.serialize({ name: "John", age: 12 });
+// Deserialize it back.
+var hash = MyType.deserialize(buffer);
+```
+
+Your created type can be interchanged with String in previous example. Also,
+types can be nested.
+
