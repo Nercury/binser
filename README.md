@@ -5,7 +5,7 @@ Binser - Binary Serializer
 
 Work in progress, but somewhat stable usage is documented bellow.
 
-### Serialize/deserialize simple object
+### Serialize/deserialize simple object using ObjectType
 
 Require this:
 
@@ -28,7 +28,7 @@ var MyType = new ObjectType(
 );
 ```
 
-Serialize your hash to buffer using your type:
+Serialize your hash to buffer using your type serializer:
 
 ```javascript
 var buffer = MyType.serialize({ name: "John", age: 12 });
@@ -40,11 +40,11 @@ Deserialize it back:
 var hash = MyType.deserialize(buffer);
 ```
     
-The buffer is node's Buffer object. Custom types can be nested.
+The buffer is node's Buffer object. ObjectTypes can be nested.
 
 ### Serialize/deserialize built-in object
 
-Created type can be interchanged with any built-in type. 
+Any built-in type serializer can be used the same way as ObjectType. 
 For example, serializing and deserializing a string:
 
 ```javascript
@@ -52,7 +52,7 @@ var buffer = types.String.serialize("Hello World!");
 var str = types.String.deserialize(buffer);
 ```
 
-### The list of built-in objects so far:
+### The list of built-in serializers so far:
 
 Value               | Size
 ------------------- | ---------
@@ -64,7 +64,7 @@ types.Int32         | 32-bit signed integer.
 types.UInt32        | 32-bit unsigned integer.
 types.CompactNumber | Integer takes from 1 to 5 bytes, depending on value.
 types.String        | Variable - length string.
-types.ObjectType    | A sequence of any other objects.
+ObjectType(config)  | A sequence of other objects.
 
 No floating point numbers (yet), no arrays (yet).
 
@@ -91,7 +91,7 @@ var Reader = require('binser').Reader;
 
 // Create one reader per connection:
 var reader = new Reader();
-reader.Type = types.String; // Or any other type
+reader.Type = types.String; // Or any other type serializer.
 reader.onRead = function(obj) { // Set callback.
     console.log(obj);
 };
