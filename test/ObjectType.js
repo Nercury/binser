@@ -24,7 +24,7 @@
  * Created by Nercury on 2014-06-15.
  */
 
-var ObjectType = require('../lib/objectType.js');
+var ObjectType = require('../lib/ObjectType.js');
 var types = require('../lib/types.js');
 
 module.exports = {
@@ -60,7 +60,7 @@ module.exports = {
                 }
             ))
         );
-        
+
         test.done();
     }
 };

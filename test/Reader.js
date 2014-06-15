@@ -25,7 +25,7 @@
  */
 
 var types = require('../lib/types.js');
-var Reader = require('../lib/reader.js');
+var Reader = require('../lib/Reader.js');
 
 module.exports = {
     ReadExactChunk : function (test) {

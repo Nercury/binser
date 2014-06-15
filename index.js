@@ -76,4 +76,10 @@ module.exports.types = require('./lib/types.js');
  * Manual buffer reader.
  * @type {Reader}
  */
-module.exports.Reader = require('./lib/reader.js');
+module.exports.Reader = require('./lib/Reader.js');
+
+/**
+ * Custom serialization type.
+ * @type {ObjectType}
+ */
+module.exports.Reader = require('./lib/ObjectType.js');
