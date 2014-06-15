@@ -56,7 +56,7 @@ var str = types.String.deserialize(buffer);
 
 ### The list of built-in objects so far:
 
-Value               | 
+Value               | Size
 ------------------- | ---------
 types.Int8          | 8-bit signed integer.
 types.UInt8         | 8-bit unsigned integer.
