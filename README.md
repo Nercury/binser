@@ -7,6 +7,16 @@ Work in progress, but stable usage is documented bellow.
 
 ## Pass simple strings over streams similar to TCP
 
+When Binser String serializer serializes string to bytes, it prepends
+the size before it. Size is encoded in Binser CompactNumber format,
+it takes minimum 1 byte (if string is small) and maximum 5 bytes 
+(see the doc for details). Maximum string size (in bytes) is unsigned 
+Int32 maximum value, but it may not be the best idea to pass message 
+of this size over the network.
+
+Included reader helper will grow internal buffer in memory to contain
+all the transmitted string before firing "onRead" callback.
+
 ### Stream writing example
 
 ```javascript
