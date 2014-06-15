@@ -5,84 +5,99 @@ Binser - Binary Serializer
 
 Work in progress, but stable usage is documented bellow.
 
-## Pass simple strings over streams similar to TCP
+## Simple serialization
 
-When Binser String serializer serializes string to bytes, it prepends
-the size before it. Size is encoded in Binser CompactNumber format,
-it takes minimum 1 byte (if string is small) and maximum 5 bytes 
-(see the doc for details). Maximum string size (in bytes) is unsigned 
-Int32 maximum value, but it may not be the best idea to pass message 
-of this size over the network.
+### Serialize/deserialize simple object
 
-Included reader helper will grow internal buffer in memory to contain
-all the transmitted string before firing "onRead" callback.
+Require this:
 
-### Stream writing example
+    ```javascript
+    // Require "types" object that contains built-in object serializers.
+    var types = require('binser').types;
+    // Require "ObjectType" that can be used to make a template for your object.
+    var ObjectType = require('binser').ObjectType;
+    ```
 
-```javascript
-// Require "types" object that contains built-in object serializers.
-var types = require('binser').types;
+Create your type serializer:
 
-// <...>
+    ```javascript
+    // Create your type that is composed from other types.
+    var MyType = new ObjectType(
+        {
+            name: types.String,
+            age: types.UInt8
+        }
+    );
+    ```
 
-// Serialize your string to buffer.
-var buffer = types.String.serialize("Hello World!");
+Serialize your hash to buffer using your type:
 
-// Send the buffer over your connection (for example, Node's TCP client):
-client.write(buffer);
-```
+    ```javascript
+    var buffer = MyType.serialize({ name: "John", age: 12 });
+    ```
+    
+Deserialize it back:
 
-### Stream reading example
+    ```javascript
+    var hash = MyType.deserialize(buffer);
+    ```
+    
+The buffer is node's Buffer object.
 
-The reader will call onRead callback when full string is received.
+### Serialize/deserialize built-in object
 
-```javascript
-// Require "types" object that contains built-in object serializers.
-var types = require('binser').types;
-// Require "Reader" that deals with variable-length chunks in network. 
-var Reader = require('binser').Reader;
+Your created type can be interchanged with any built-in type. 
+For example, you can serialize and deserialize a string:
 
-// <...>
+    ```javascript
+    var buffer = types.String.serialize("Hello World!");
+    var str = types.String.deserialize(buffer);
+    ```
 
-// Create one reader per connection:
-var reader = new Reader();
-reader.Type = types.String; // Set expected type to string.
-reader.onRead = function(str) { // Set callback.
-    console.log(str);
-};
+### The list of built-in objects so far:
 
-// <...>
+     Value               | 
+     ------------------- | ---------
+     types.Int8          | 8-bit signed integer.
+     types.UInt8         | 8-bit unsigned integer.
+     types.Int16         | 16-bit signed integer.
+     types.UInt16        | 16-bit unsigned integer.
+     types.Int32         | 32-bit signed integer.
+     types.UInt32        | 32-bit unsigned integer.
+     types.CompactNumber | Integer takes from 1 to 5 bytes, depending on value.
+     types.String        | Variable - length string.
+     types.ObjectType    | A sequence of any other objects.
 
-// On your "data" event, feed the buffer bytes into your reader:
-reader.feed(buffer);
-```
+## Pass serialized objects over streams similar to TCP
 
-## Simple object serialization and deserialization
+Included ```Reader``` helper can help deserializing data transmitted
+over protocol such as TCP. It will automatically call ```onRead```
+callback only when full object is available.
 
-ObjectType uses types in clearly defined sequence to serialize a hash.
-If this sequence does not change, the object can be restored to the exact same
-hash on deserialization.
+Writing to stream is easy:
 
-```javascript
-// Require "types" object that contains built-in object serializers.
-var types = require('binser').types;
-// Require "ObjectType" that can be used to make a template for your object.
-var ObjectType = require('binser').ObjectType;
+    ```javascript
+    // Send the buffer over your connection (for example, Node's TCP client):
+    client.write(buffer);
+    ```
 
-// Create your type that is composed from other types.
-var MyType = new ObjectType(
-    {
-        name: types.String,
-        age: types.UInt8
-    }
-);
+Reading is a bit more involved:
 
-// Serialize your hash to buffer using your type.
-var buffer = MyType.serialize({ name: "John", age: 12 });
-// Deserialize it back.
-var hash = MyType.deserialize(buffer);
-```
-
-Your created type can be interchanged with String in previous example. Also,
-types can be nested.
-
+    ```javascript
+    // Require "Reader" that deals with variable-length chunks in network. 
+    var Reader = require('binser').Reader;
+    
+    // <...>
+    
+    // Create one reader per connection:
+    var reader = new Reader();
+    reader.Type = types.String; // Or any other type
+    reader.onRead = function(obj) { // Set callback.
+        console.log(obj);
+    };
+    
+    // <...>
+    
+    // On your "data" event, feed the buffer bytes into your reader:
+    reader.feed(buffer);
+    ```
