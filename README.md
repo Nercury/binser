@@ -3,9 +3,7 @@ Binser - Binary Serializer
 
 [![Build Status](https://travis-ci.org/Nercury/binser.svg?branch=master)](https://travis-ci.org/Nercury/binser)
 
-Work in progress, but stable usage is documented bellow.
-
-## Simple serialization
+Work in progress, but somewhat stable usage is documented bellow.
 
 ### Serialize/deserialize simple object
 
@@ -42,12 +40,12 @@ Deserialize it back:
 var hash = MyType.deserialize(buffer);
 ```
     
-The buffer is node's Buffer object.
+The buffer is node's Buffer object. Custom types can be nested.
 
 ### Serialize/deserialize built-in object
 
-Your created type can be interchanged with any built-in type. 
-For example, you can serialize and deserialize a string:
+Created type can be interchanged with any built-in type. 
+For example, serializing and deserializing a string:
 
 ```javascript
 var buffer = types.String.serialize("Hello World!");
@@ -68,7 +66,9 @@ types.CompactNumber | Integer takes from 1 to 5 bytes, depending on value.
 types.String        | Variable - length string.
 types.ObjectType    | A sequence of any other objects.
 
-## Pass serialized objects over streams similar to TCP
+No floating point numbers (yet), no arrays (yet).
+
+### Pass serialized objects over streams similar to TCP
 
 Included ```Reader``` helper can help deserializing data transmitted
 over protocol such as TCP. It will automatically call ```onRead```
