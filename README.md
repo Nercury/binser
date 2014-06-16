@@ -40,8 +40,6 @@ Deserialize it back:
 var hash = MyType.deserialize(buffer);
 ```
     
-The buffer is node's Buffer object. ObjectTypes can be nested.
-
 ### Serialize/deserialize built-in object
 
 Any built-in type serializer can be used the same way as ObjectType. 
@@ -51,6 +49,38 @@ For example, serializing and deserializing a string:
 var buffer = types.String.serialize("Hello World!");
 var str = types.String.deserialize(buffer);
 ```
+
+### Serialize/deserialize an array of objects
+
+ArrayType can be used for serializing arrays of any type of
+objects:
+
+```javascript
+var ArrayType = require('binser').ArrayType;
+
+var stringArrayType = new ArrayType(types.String);
+
+var buffer = stringArrayType.serialize([ "Hello", " ", "World!" ]);
+var stringArray = types.String.deserialize(buffer);
+```
+
+Array can be composed of custom type items:
+
+```javascript
+var ArrayType = require('binser').ArrayType;
+var ObjectType = require('binser').ObjectType;
+
+var pointType = new ObjectType({
+    x: types.CompactNumber,
+    y: types.CompactNumber,
+});
+var pointsArrayType = new ArrayType(pointType);
+
+var buffer = stringArrayType.serialize([ { x: 15, y: -10 }, { x: 0, y: 62111 } ]);
+var pointsArray = types.String.deserialize(buffer);
+```
+
+And any other nested combination.
 
 ### The list of built-in serializers so far:
 
@@ -65,8 +95,9 @@ types.UInt32        | 32-bit unsigned integer.
 types.CompactNumber | Integer takes from 1 to 5 bytes, depending on value.
 types.String        | Variable - length string.
 ObjectType(config)  | A sequence of other objects.
+ArrayType(<Type>)   | A varied sequence of other objects.
 
-No floating point numbers (yet), no arrays (yet).
+No floating point numbers (yet).
 
 ### Pass serialized objects over streams similar to TCP
 

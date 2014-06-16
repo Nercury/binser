@@ -121,3 +121,14 @@ the sum of the sizes of all inner objects.
   CompactNumber that contains positive integer for length, followed by the sequence
   of inner objects. The types of inner objects and the order of them should be
   known by application.
+  
+* ### ArrayType
+
+  Array type is a container of another object repeated a number of times.
+  Array type is composed of:
+    
+  | ---------------------------- | -------------------------- | ----------------------- |
+  | Total length (CompactNumber) | Array size (CompactNumber) | Object(1) ... Object(n) |
+  | ---------------------------- | -------------------------- | ----------------------- |
+  
+  Possible array parameters are limited by integer size of CompactNumber.

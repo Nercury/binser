@@ -41,3 +41,9 @@ module.exports.Reader = require('./lib/Reader.js');
  * @type {ObjectType}
  */
 module.exports.ObjectType = require('./lib/ObjectType.js');
+
+/**
+ * Array type.
+ * @type {ArrayType}
+ */
+module.exports.ArrayType = require('./lib/ArrayType.js');
