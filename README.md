@@ -3,7 +3,18 @@ Binser - Binary Serializer
 
 [![Build Status](https://travis-ci.org/Nercury/binser.svg?branch=master)](https://travis-ci.org/Nercury/binser)
 
-Work in progress, but somewhat stable usage is documented bellow.
+Binser uses its own binary protocol to serialize nested object
+structures to binary stream. Some feeatures:
+
+ * Primitives such as Int8, UInt8 ... Int32, UInt32;
+ * CompactNumber minimizes size of numbers;
+ * String type that takes care of string transmission by pre-pending string size;
+ * Custom object type for your own objects;
+ * Arrays;
+ * Unlimited mixing and nesting of all available type combinations;
+ * Documented protocol: look at /doc.
+
+Stable usage is documented bellow.
 
 ### Serialize/deserialize simple object using ObjectType
 
