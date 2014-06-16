@@ -127,8 +127,8 @@ the sum of the sizes of all inner objects.
   Array type is a container of another object repeated a number of times.
   Array type is composed of:
     
-  | ---------------------------- | -------------------------- | ----------------------- |
-  | Total length (CompactNumber) | Array size (CompactNumber) | Object(1) ... Object(n) |
-  | ---------------------------- | -------------------------- | ----------------------- |
+      | ---------------------------- | -------------------------- | ----------------------- |
+      | Total bytes (CompactNumber)  | Array size (CompactNumber) | Object(1) ... Object(n) |
+      | ---------------------------- | -------------------------- | ----------------------- |
   
-  Possible array parameters are limited by integer size of CompactNumber.
+  Total bytes include byte size of "Array size" field.

@@ -50,10 +50,10 @@ var buffer = types.String.serialize("Hello World!");
 var str = types.String.deserialize(buffer);
 ```
 
-### Serialize/deserialize an array of objects
+### Serialize/deserialize an array of objects using ArrayType
 
 ArrayType can be used for serializing arrays of any type of
-objects:
+objects, here is an example of string array:
 
 ```javascript
 var ArrayType = require('binser').ArrayType;
@@ -61,10 +61,10 @@ var ArrayType = require('binser').ArrayType;
 var stringArrayType = new ArrayType(types.String);
 
 var buffer = stringArrayType.serialize([ "Hello", " ", "World!" ]);
-var stringArray = types.String.deserialize(buffer);
+var stringArray = stringArrayType.deserialize(buffer);
 ```
 
-Array can be composed of custom type items:
+ObjectType can also be used:
 
 ```javascript
 var ArrayType = require('binser').ArrayType;
@@ -76,8 +76,8 @@ var pointType = new ObjectType({
 });
 var pointsArrayType = new ArrayType(pointType);
 
-var buffer = stringArrayType.serialize([ { x: 15, y: -10 }, { x: 0, y: 62111 } ]);
-var pointsArray = types.String.deserialize(buffer);
+var buffer = pointsArrayType.serialize([ { x: 15, y: -10 }, { x: 0, y: 62111 } ]);
+var pointsArray = pointsArrayType.deserialize(buffer);
 ```
 
 And any other nested combination.
@@ -92,7 +92,7 @@ types.Int16         | 16-bit signed integer.
 types.UInt16        | 16-bit unsigned integer.
 types.Int32         | 32-bit signed integer.
 types.UInt32        | 32-bit unsigned integer.
-types.CompactNumber | Integer takes from 1 to 5 bytes, depending on value.
+types.CompactNumber | Integer takes from 1 to 5 bytes, depending on value size.
 types.String        | Variable - length string.
 ObjectType(config)  | A sequence of other objects.
 ArrayType(<Type>)   | A varied sequence of other objects.
