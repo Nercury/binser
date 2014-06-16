@@ -114,30 +114,33 @@ the sum of the sizes of all inner objects.
 * ### String
 
   CompactNumber that contains positive integer for length, followed by the contents
-  of that length. Length is measured in bytes. String itself should always be UTF8.
+  of that length:
   
-    | ---------------------------- | ----------------------- |
-    | Total bytes (CompactNumber)  | String value            |
-    | ---------------------------- | ----------------------- |
+      | ---------------------------- | ----------------------- |
+      | Total bytes (CompactNumber)  | String value            |
+      | ---------------------------- | ----------------------- |
+    
+  Length is measured in bytes. String itself should always be UTF-8.
   
 * ### ObjectType
 
   CompactNumber that contains positive integer for length, followed by the sequence
-  of inner objects. The types of inner objects and the order of them should be
+  of inner objects:
+  
+      | ---------------------------- | ----------------------- |
+      | Total bytes (CompactNumber)  | Object(1) ... Object(n) |
+      | ---------------------------- | ----------------------- |
+   
+  The types of inner objects and the order of them should be
   known by application.
-  
-    | ---------------------------- | ----------------------- |
-    | Total bytes (CompactNumber)  | Object(1) ... Object(n) |
-    | ---------------------------- | ----------------------- |
-
-  
+ 
 * ### ArrayType
 
   Array type is a container of another object repeated a number of times.
   Array type is composed of:
     
-    | ---------------------------- | -------------------------- | ----------------------- |
-    | Total bytes (CompactNumber)  | Array size (CompactNumber) | Object(1) ... Object(n) |
-    | ---------------------------- | -------------------------- | ----------------------- |
+      | ---------------------------- | -------------------------- | ----------------------- |
+      | Total bytes (CompactNumber)  | Array size (CompactNumber) | Object(1) ... Object(n) |
+      | ---------------------------- | -------------------------- | ----------------------- |
 
   Total bytes include byte size of "Array size" field.
